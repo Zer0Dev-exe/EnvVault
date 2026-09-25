@@ -44,8 +44,17 @@ async def goto(app, pilot, project, env):
                 return found
         return None
 
-    tree.move_cursor(find(tree.root))
-    await pilot.pause()
+    # build_tree mueve el cursor tras el siguiente refresco; en máquinas lentas
+    # ese movimiento puede llegar después del nuestro, así que reintentamos.
+    target = find(tree.root)
+    for _ in range(20):
+        tree.move_cursor(target)
+        await pilot.pause()
+        if tree.cursor_node is target:
+            await pilot.pause()
+            if tree.cursor_node is target:
+                return
+    raise AssertionError(f"el árbol no llegó a {project}/{env}")
 
 
 def rows(app):
