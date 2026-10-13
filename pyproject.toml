@@ -14,7 +14,7 @@ dependencies = [
     "rich>=15.0.0",
     "textual>=8.2.8",
     "cryptography>=44",
-    "keyring>=24",
+    "keyring>=25.7.0",
     "httpx>=0.28.1",
 ]
 
